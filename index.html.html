@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Review Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin: 20px auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step {
+            display: none;
+            padding: 30px;
+            min-height: 450px;
+        }
+        
+        .step.active {
+            display: block;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #1565c0;
+            font-weight: 600;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #2196f3, #4caf50);
+            border-radius: 2px;
+        }
+        
+        .step p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #455a64;
+            font-size: 16px;
+        }
+        
+        .step-nav {
+            margin: 30px 0 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .progress-bar {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        
+        .progress-bar span {
+            padding: 8px 18px;
+            margin: 0 5px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar .completed {
+            background-color: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .progress-bar .active {
+            background-color: #bbdefb;
+            color: #0d47a1;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.25);
+        }
+        
+        .progress-bar .upcoming {
+            background-color: #f5f5f5;
+            color: #9e9e9e;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1565c0;
+            font-size: 15px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f1f8fe;
+            color: #0d47a1;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2196f3;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.25);
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #78909c 0%, #546e7a 100%);
+        }
+        
+        .btn-back:hover {
+            background: linear-gradient(135deg, #546e7a 0%, #78909c 100%);
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        }
+        
+        .btn-next:hover {
+            background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            padding: 16px 40px;
+            border-radius: 50px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.45);
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+        }
+        
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #2196f3;
+        }
+        
+        .step-list {
+            text-align: left;
+            display: inline-block;
+            margin-top: 15px;
+            width: 80%;
+        }
+        
+        .step-list li {
+            margin-bottom: 10px;
+            padding-left: 30px;
+            position: relative;
+            list-style-type: none;
+            text-align: left;
+        }
+        
+        .step-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-top: 20px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            padding: 14px 40px;
+            border-radius: 50px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.35);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.45);
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+        }
+        
+        .success-message {
+            font-size: 20px;
+            color: #2e7d32;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            border-left: 5px solid #4caf50;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 12px;
+            }
+            .step {
+                padding: 20px;
+                min-height: auto;
+            }
+            .progress-bar span {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            .step-list {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Step 1: Index Page -->
+        <div class="step active" id="step1">
+            <div class="intro-icon">📋</div>
+            <h2>Fill Review Form</h2>
+            <p>This form is designed to gather valuable insights for our current survey.</p>
+            <p>Your input will help us understand societal activities and develop optimal solutions.</p>
+
+            <p>This form contains the following sections:</p>
+            <ul class="step-list">
+                <li>Account Details</li>
+                <li>Personal Details</li>
+                <li>Review Section</li>
+            </ul>
+
+            <button class="start-btn" onclick="nextStep(2)">
+                <span>Get Started</span>
+                <span>➡️</span>
+            </button>
+        </div>
+
+        <!-- Step 2: Form 1 (Account) -->
+        <div class="step" id="step2">
+            <div class="progress-bar">
+                <span class="active">Step 1: Account</span>
+                <span class="upcoming">Step 2: Personal</span>
+                <span class="upcoming">Step 3: Review</span>
+            </div>
+
+            <h2>Account Details</h2>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                </div>
+            </div>
+
+            <div class="step-nav">
+                <button class="btn btn-back" onclick="prevStep(1)">
+                    <span>⬅️</span>
+                    <span>Back</span>
+                </button>
+                <button class="btn btn-next" onclick="nextStep(3)">
+                    <span>Next</span>
+                    <span>➡️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Form 2 (Personal Details) -->
+        <div class="step" id="step3">
+            <div class="progress-bar">
+                <span class="completed">Step 1: Account</span>
+                <span class="active">Step 2: Personal</span>
+                <span class="upcoming">Step 3: Review</span>
+            </div>
+
+            <h2>Personal Details</h2>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="first-name">First Name:</label>
+                    <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last Name:</label>
+                    <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" required>
+                </div>
+                <div class="form-group">
+                    <label for="cnic">CNIC:</label>
+                    <input type="text" id="cnic" name="cnic" placeholder="_____-______-_" required>
+                </div>
+                <div class="form-group">
+                    <label for="social-link">Social Link:</label>
+                    <input type="text" id="social-link" name="social-link" placeholder="Facebook/LinkedIn profile link" required>
+                </div>
+            </div>
+
+            <div class="step-nav">
+                <button class="btn btn-back" onclick="prevStep(2)">
+                    <span>⬅️</span>
+                    <span>Back</span>
+                </button>
+                <button class="btn btn-next" onclick="nextStep(4)">
+                    <span>Next</span>
+                    <span>➡️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Review Section -->
+        <div class="step" id="step4">
+            <div class="progress-bar">
+                <span class="completed">Step 1: Account</span>
+                <span class="completed">Step 2: Personal</span>
+                <span class="active">Step 3: Review</span>
+            </div>
+
+            <h2>Review Your Information</h2>
+
+            <div class="form-section">
+                <p>Please review your information before submitting:</p>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <div id="review-email" class="review-field">user@example.com</div>
+                </div>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <div id="review-name" class="review-field">John Doe</div>
+                </div>
+                <div class="form-group">
+                    <label>CNIC:</label>
+                    <div id="review-cnic" class="review-field">12345-678901-2</div>
+                </div>
+                <div class="form-group">
+                    <label>Social Link:</label>
+                    <div id="review-social" class="review-field">linkedin.com/in/johndoe</div>
+                </div>
+            </div>
+
+            <div class="step-nav">
+                <button class="btn btn-back" onclick="prevStep(3)">
+                    <span>⬅️</span>
+                    <span>Back</span>
+                </button>
+                <button class="submit-btn" onclick="submitForm()">
+                    <span>Submit Form</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Confirmation -->
+        <div class="step" id="step5">
+            <div class="progress-bar">
+                <span class="completed">Step 1: Account</span>
+                <span class="completed">Step 2: Personal</span>
+                <span class="completed">Step 3: Review</span>
+            </div>
+
+            <div class="intro-icon">✅</div>
+            <h2>Form Submitted Successfully!</h2>
+
+            <div class="success-message">
+                Thank you for completing the form. Your information has been received.
+            </div>
+
+            <p>We appreciate your time and valuable input.</p>
+            <p>Our team will review your submission and contact you if needed.</p>
+
+            <button class="start-btn" onclick="nextStep(1)" style="margin-top: 30px;">
+                <span>Submit Another Form</span>
+            </button>
+        </div>
+    </div>
+    <script>
+        function nextStep(step) {
+            document.querySelectorAll('.step').forEach(element => {
+                element.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+
+            // Update review fields
+            if (step === 4) {
+                document.getElementById('review-email').textContent = document.getElementById('email').value;
+                document.getElementById('review-name').textContent =
+                    document.getElementById('first-name').value + ' ' +
+                    document.getElementById('last-name').value;
+                document.getElementById('review-cnic').textContent = document.getElementById('cnic').value;
+                document.getElementById('review-social').textContent = document.getElementById('social-link').value;
+            }
+        }
+
+        function prevStep(step) {
+            document.querySelectorAll('.step').forEach(element => {
+                element.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+        }
+
+        function submitForm() {
+            nextStep(5);
+
+            // Simulate form submission
+            setTimeout(() => {
+                document.querySelector('.success-message').innerHTML =
+                    "Thank you for completing the form!<br>Your submission has been processed successfully.";
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
